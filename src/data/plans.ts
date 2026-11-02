@@ -32,7 +32,7 @@ export const PLANS: ReadingPlan[] = [
   { id: "gospels-30", name: "Gospels in 30 Days", description: "Matthew, Mark, Luke and John.", days: spread(chaptersOf(["MAT", "MRK", "LUK", "JHN"]), 30) },
   { id: "gospels-40", name: "Gospels in 40 Days", description: "A gentler pace through the four Gospels.", days: spread(chaptersOf(["MAT", "MRK", "LUK", "JHN"]), 40) },
   { id: "advent-isaiah", name: "Advent with Isaiah", description: "The prophet of Advent, in 24 days before Christmas.", days: spread(chaptersOf(["ISA"]), 24) },
-  { id: "lent-passion", name: "Lent: Repentance & the Passion", description: "Penitential Psalms, Jonah, and the Passion narratives over 40 days.", days: spread([...[6, 32, 38, 51, 102, 130, 143].map((c) => ({ book: "PSA", chapter: c })), ...chaptersOf(["JON"]), ...[26, 27, 28].map((c) => ({ book: "MAT", chapter: c })), ...[14, 15, 16].map((c) => ({ book: "MRK", chapter: c })), ...[22, 23, 24].map((c) => ({ book: "LUK", chapter: c })), ...[13, 14, 15, 16, 17, 18, 19, 20, 21].map((c) => ({ book: "JHN", chapter: c }))], 40) },
+  { id: "lent-passion", name: "Lent: Repentance & the Passion", description: "Penitential Psalms, Jonah and the Passion narratives in four weeks.", days: spread([...[6, 32, 38, 51, 102, 130, 143].map((c) => ({ book: "PSA", chapter: c })), ...chaptersOf(["JON"]), ...[26, 27, 28].map((c) => ({ book: "MAT", chapter: c })), ...[14, 15, 16].map((c) => ({ book: "MRK", chapter: c })), ...[22, 23, 24].map((c) => ({ book: "LUK", chapter: c })), ...[13, 14, 15, 16, 17, 18, 19, 20, 21].map((c) => ({ book: "JHN", chapter: c }))], 28) },
   { id: "psalms-30", name: "Psalms in 30 Days", description: "Five psalms a day.", days: spread(chaptersOf(["PSA"]), 30) },
 ];
 

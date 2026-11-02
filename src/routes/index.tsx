@@ -1,17 +1,18 @@
 import { createFileRoute, Link, useHydrated } from "@tanstack/react-router";
-import { Copy, Flame, Share2 } from "lucide-react";
-import { Btn, Card, Page, btnClass } from "@/components/app-ui";
+import { BookOpen, Check, ChevronRight, CircleDot, Copy, Flame, HandHeart, Share2 } from "lucide-react";
+import { Btn, Card, ListenButton, Page, btnClass } from "@/components/app-ui";
 import { getToday } from "@/lib/today";
 import { copyText, shareText } from "@/lib/share";
-import { markPrayedToday, useStreak } from "@/lib/streak";
+import { encouragement, goalMet, markPath, useStreak, type PathItem } from "@/lib/streak";
+import { useSettings } from "@/lib/settings";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Today — Sinner's Cure" },
-      { name: "description", content: "Today's Mass, the Church season, a daily verse and today's Rosary mysteries." },
+      { name: "description", content: "Today's Mass, the Church season, a daily verse, and a simple daily path of Scripture and prayer." },
       { property: "og:title", content: "Today — Sinner's Cure" },
-      { property: "og:description", content: "Today's Mass, the Church season, a daily verse and today's Rosary mysteries." },
+      { property: "og:description", content: "Today's Mass, the Church season, a daily verse, and a simple daily path of Scripture and prayer." },
     ],
   }),
   component: TodayPage,
@@ -27,10 +28,18 @@ const DOT: Record<string, string> = {
 
 function TodayPage() {
   const hydrated = useHydrated();
-  const { streak, prayedToday } = useStreak();
+  const { streak, prayedToday, todayItems } = useStreak();
+  const { settings } = useSettings();
   if (!hydrated) return <Page title="Today">{null}</Page>;
   const t = getToday(new Date());
   const verseText = `"${t.verse.text}" — ${t.verse.ref}`;
+  const met = goalMet(todayItems, settings.goal);
+
+  const steps: { item: PathItem; title: string; detail: string; to: "/mass" | "/rosary" | "/prayers"; icon: typeof BookOpen }[] = [
+    { item: "readings", title: "Hear the Word", detail: t.mass.readings.length ? `Today's readings · ${t.mass.readings.find((r) => r.label === "Gospel")?.citation ?? ""}` : "Read today's Gospel", to: "/mass", icon: BookOpen },
+    { item: "rosary", title: "Pray the Rosary", detail: t.mysteries.name, to: "/rosary", icon: CircleDot },
+    { item: "prayer", title: "A moment of prayer", detail: "Angelus, Chaplet or a prayer of your choice", to: "/prayers", icon: HandHeart },
+  ];
 
   return (
     <Page eyebrow={t.dateLabel} title="Today">
@@ -45,6 +54,54 @@ function TodayPage() {
       </div>
 
       <div className="space-y-4">
+        <section className="card-surface border-primary/40 p-6">
+          <p className="eyebrow">{t.verseFromMass ? "Verse of the day · from today's Mass" : "Verse of the day"}</p>
+          <blockquote className="mt-3 font-serif text-[1.6rem] leading-snug">“{t.verse.text}”</blockquote>
+          <p className="mt-3 font-semibold text-primary">{t.verse.ref}</p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <ListenButton id="verse" text={`${t.verse.text} ${t.verse.ref}`} />
+            <Btn variant="outline" onClick={() => copyText(verseText)} aria-label="Copy verse">
+              <Copy className="size-5" />
+            </Btn>
+            <Btn variant="outline" onClick={() => shareText(verseText)} aria-label="Share verse">
+              <Share2 className="size-5" />
+            </Btn>
+          </div>
+        </section>
+
+        <Card>
+          <div className="flex items-baseline justify-between gap-2">
+            <p className="eyebrow">Today's path</p>
+            <p className="text-sm text-muted-foreground">{settings.goal === "full" ? "Goal: readings + Rosary" : "Goal: any one step"}</p>
+          </div>
+          <ol className="mt-3 space-y-2">
+            {steps.map((s) => {
+              const done = todayItems.includes(s.item);
+              const Icon = s.icon;
+              return (
+                <li key={s.item}>
+                  <Link to={s.to} className="flex min-h-16 items-center gap-3 rounded-xl border bg-background px-3 py-2">
+                    <span className={`flex size-10 shrink-0 items-center justify-center rounded-full ${done ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
+                      {done ? <Check className="size-5" aria-label="Done" /> : <Icon className="size-5" aria-hidden />}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-semibold">{s.title}</span>
+                      <span className="block truncate text-muted-foreground">{s.detail}</span>
+                    </span>
+                    <ChevronRight className="size-5 text-muted-foreground" />
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+          <p className="mt-4">{met || prayedToday ? encouragement(streak, true) : encouragement(streak, false)}</p>
+          {!todayItems.includes("prayer") && (
+            <Btn variant="outline" className="mt-3 w-full" onClick={() => markPath("prayer")}>
+              I prayed today
+            </Btn>
+          )}
+        </Card>
+
         <Card>
           <p className="eyebrow">Today's Mass</p>
           <h2 className="mt-1 font-serif text-2xl font-semibold leading-snug">{t.mass.celebration}</h2>
@@ -59,44 +116,10 @@ function TodayPage() {
               ))}
             </dl>
           )}
-        </Card>
-
-        <Card>
-          <p className="eyebrow">Verse of the day</p>
-          <blockquote className="scripture mt-2">“{t.verse.text}”</blockquote>
-          <p className="mt-2 font-medium text-primary">{t.verse.ref}</p>
-          <div className="mt-4 flex gap-3">
-            <Btn variant="outline" onClick={() => copyText(verseText)}>
-              <Copy className="size-5" /> Copy
-            </Btn>
-            <Btn variant="outline" onClick={() => shareText(verseText)}>
-              <Share2 className="size-5" /> Share
-            </Btn>
-          </div>
-        </Card>
-
-        <Card>
-          <p className="eyebrow">Today's Rosary</p>
-          <h2 className="mt-1 font-serif text-2xl font-semibold">{t.mysteries.name}</h2>
-          <ol className="mt-3 list-decimal space-y-1 pl-6">
-            {t.mysteries.mysteries.map((m) => (
-              <li key={m.title}>{m.title}</li>
-            ))}
-          </ol>
-          <Link to="/rosary" className={btnClass("primary", "mt-5 w-full")}>
-            Start praying
-          </Link>
-        </Card>
-
-        <Card>
-          <p className="eyebrow">Daily prayer</p>
-          <p className="mt-1">
-            {prayedToday ? "You have prayed today. God bless you." : "Mark today when you have prayed to keep your streak."}
-          </p>
-          {!prayedToday && (
-            <Btn variant="outline" className="mt-4 w-full" onClick={() => markPrayedToday()}>
-              I prayed today
-            </Btn>
+          {t.mass.available && (
+            <Link to="/mass" className={btnClass("primary", "mt-4 w-full")}>
+              Read & listen
+            </Link>
           )}
         </Card>
       </div>
