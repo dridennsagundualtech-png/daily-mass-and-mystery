@@ -10,33 +10,102 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RosaryRouteImport } from './routes/rosary'
+import { Route as PrayersIndexRouteImport } from './routes/prayers.index'
+import { Route as PrayersIdRouteImport } from './routes/prayers.$id'
+import { Route as PrayersChapletRouteImport } from './routes/prayers.chaplet'
+import { Route as PrayersConfessionRouteImport } from './routes/prayers.confession'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RosaryRoute = RosaryRouteImport.update({
+  id: '/rosary',
+  path: '/rosary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrayersIndexRoute = PrayersIndexRouteImport.update({
+  id: '/prayers/',
+  path: '/prayers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrayersIdRoute = PrayersIdRouteImport.update({
+  id: '/prayers/$id',
+  path: '/prayers/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrayersChapletRoute = PrayersChapletRouteImport.update({
+  id: '/prayers/chaplet',
+  path: '/prayers/chaplet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrayersConfessionRoute = PrayersConfessionRouteImport.update({
+  id: '/prayers/confession',
+  path: '/prayers/confession',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/rosary': typeof RosaryRoute
+  '/prayers/$id': typeof PrayersIdRoute
+  '/prayers/chaplet': typeof PrayersChapletRoute
+  '/prayers/confession': typeof PrayersConfessionRoute
+  '/prayers/': typeof PrayersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/rosary': typeof RosaryRoute
+  '/prayers/$id': typeof PrayersIdRoute
+  '/prayers/chaplet': typeof PrayersChapletRoute
+  '/prayers/confession': typeof PrayersConfessionRoute
+  '/prayers': typeof PrayersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/rosary': typeof RosaryRoute
+  '/prayers/$id': typeof PrayersIdRoute
+  '/prayers/chaplet': typeof PrayersChapletRoute
+  '/prayers/confession': typeof PrayersConfessionRoute
+  '/prayers/': typeof PrayersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/rosary'
+    | '/prayers/$id'
+    | '/prayers/chaplet'
+    | '/prayers/confession'
+    | '/prayers/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/rosary'
+    | '/prayers/$id'
+    | '/prayers/chaplet'
+    | '/prayers/confession'
+    | '/prayers'
+  id:
+    | '__root__'
+    | '/'
+    | '/rosary'
+    | '/prayers/$id'
+    | '/prayers/chaplet'
+    | '/prayers/confession'
+    | '/prayers/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  RosaryRoute: typeof RosaryRoute
+  PrayersIdRoute: typeof PrayersIdRoute
+  PrayersChapletRoute: typeof PrayersChapletRoute
+  PrayersConfessionRoute: typeof PrayersConfessionRoute
+  PrayersIndexRoute: typeof PrayersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +117,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rosary': {
+      id: '/rosary'
+      path: '/rosary'
+      fullPath: '/rosary'
+      preLoaderRoute: typeof RosaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prayers/': {
+      id: '/prayers/'
+      path: '/prayers'
+      fullPath: '/prayers/'
+      preLoaderRoute: typeof PrayersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prayers/$id': {
+      id: '/prayers/$id'
+      path: '/prayers/$id'
+      fullPath: '/prayers/$id'
+      preLoaderRoute: typeof PrayersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prayers/chaplet': {
+      id: '/prayers/chaplet'
+      path: '/prayers/chaplet'
+      fullPath: '/prayers/chaplet'
+      preLoaderRoute: typeof PrayersChapletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prayers/confession': {
+      id: '/prayers/confession'
+      path: '/prayers/confession'
+      fullPath: '/prayers/confession'
+      preLoaderRoute: typeof PrayersConfessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  RosaryRoute: RosaryRoute,
+  PrayersIdRoute: PrayersIdRoute,
+  PrayersChapletRoute: PrayersChapletRoute,
+  PrayersConfessionRoute: PrayersConfessionRoute,
+  PrayersIndexRoute: PrayersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
