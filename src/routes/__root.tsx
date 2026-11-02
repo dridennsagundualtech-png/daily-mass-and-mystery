@@ -15,6 +15,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav, Toaster } from "@/components/app-ui";
 import { useSettings } from "@/lib/settings";
 import { getToday } from "@/lib/today";
+import { setupOffline } from "@/lib/pwa";
+import { useReminder } from "@/lib/reminder";
 
 function NotFoundComponent() {
   return (
@@ -76,6 +78,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/favicon.ico" },
     ],
   }),
   shellComponent: RootShell,
@@ -111,7 +115,9 @@ function RootComponent() {
 
   useEffect(() => {
     document.documentElement.dataset["lit"] = getToday(new Date()).color;
+    void setupOffline();
   }, []);
+  useReminder(settings.reminder, settings.reminderFor);
 
   return (
     <QueryClientProvider client={queryClient}>

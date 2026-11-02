@@ -48,3 +48,13 @@ describe("streak", () => {
     expect(computeStreak(["2026-11-01", "2026-11-02", "2026-11-03"], new Date(2026, 10, 3))).toBe(3));
   it("breaks on a missed day", () => expect(computeStreak(["2026-11-01", "2026-11-03"], new Date(2026, 10, 3))).toBe(1));
 });
+
+import { bestStreak, goalMet } from "@/lib/streak";
+describe("daily goal", () => {
+  it("'any' goal is met by one step", () => expect(goalMet(["prayer"], "any")).toBe(true));
+  it("'full' goal needs readings + rosary", () => {
+    expect(goalMet(["readings"], "full")).toBe(false);
+    expect(goalMet(["readings", "rosary"], "full")).toBe(true);
+  });
+  it("best streak finds the longest run", () => expect(bestStreak(["2026-10-01", "2026-10-02", "2026-10-03", "2026-10-10"])).toBe(3));
+});
