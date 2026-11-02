@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BibleRouteImport } from './routes/bible'
+import { Route as MassRouteImport } from './routes/mass'
 import { Route as RosaryRouteImport } from './routes/rosary'
 import { Route as MoreIndexRouteImport } from './routes/more.index'
+import { Route as MoreIntentionsRouteImport } from './routes/more.intentions'
 import { Route as MoreSavedRouteImport } from './routes/more.saved'
 import { Route as MoreSettingsRouteImport } from './routes/more.settings'
 import { Route as PrayersIndexRouteImport } from './routes/prayers.index'
@@ -31,6 +33,11 @@ const BibleRoute = BibleRouteImport.update({
   path: '/bible',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MassRoute = MassRouteImport.update({
+  id: '/mass',
+  path: '/mass',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RosaryRoute = RosaryRouteImport.update({
   id: '/rosary',
   path: '/rosary',
@@ -39,6 +46,11 @@ const RosaryRoute = RosaryRouteImport.update({
 const MoreIndexRoute = MoreIndexRouteImport.update({
   id: '/more/',
   path: '/more/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoreIntentionsRoute = MoreIntentionsRouteImport.update({
+  id: '/more/intentions',
+  path: '/more/intentions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoreSavedRoute = MoreSavedRouteImport.update({
@@ -80,7 +92,9 @@ const MorePlansIdRoute = MorePlansIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bible': typeof BibleRoute
+  '/mass': typeof MassRoute
   '/rosary': typeof RosaryRoute
+  '/more/intentions': typeof MoreIntentionsRoute
   '/more/saved': typeof MoreSavedRoute
   '/more/settings': typeof MoreSettingsRoute
   '/prayers/$id': typeof PrayersIdRoute
@@ -93,7 +107,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bible': typeof BibleRoute
+  '/mass': typeof MassRoute
   '/rosary': typeof RosaryRoute
+  '/more/intentions': typeof MoreIntentionsRoute
   '/more/saved': typeof MoreSavedRoute
   '/more/settings': typeof MoreSettingsRoute
   '/prayers/$id': typeof PrayersIdRoute
@@ -107,7 +123,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bible': typeof BibleRoute
+  '/mass': typeof MassRoute
   '/rosary': typeof RosaryRoute
+  '/more/intentions': typeof MoreIntentionsRoute
   '/more/saved': typeof MoreSavedRoute
   '/more/settings': typeof MoreSettingsRoute
   '/prayers/$id': typeof PrayersIdRoute
@@ -122,7 +140,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/bible'
+    | '/mass'
     | '/rosary'
+    | '/more/intentions'
     | '/more/saved'
     | '/more/settings'
     | '/prayers/$id'
@@ -135,7 +155,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/bible'
+    | '/mass'
     | '/rosary'
+    | '/more/intentions'
     | '/more/saved'
     | '/more/settings'
     | '/prayers/$id'
@@ -148,7 +170,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/bible'
+    | '/mass'
     | '/rosary'
+    | '/more/intentions'
     | '/more/saved'
     | '/more/settings'
     | '/prayers/$id'
@@ -162,7 +186,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BibleRoute: typeof BibleRoute
+  MassRoute: typeof MassRoute
   RosaryRoute: typeof RosaryRoute
+  MoreIntentionsRoute: typeof MoreIntentionsRoute
   MoreSavedRoute: typeof MoreSavedRoute
   MoreSettingsRoute: typeof MoreSettingsRoute
   PrayersIdRoute: typeof PrayersIdRoute
@@ -189,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BibleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mass': {
+      id: '/mass'
+      path: '/mass'
+      fullPath: '/mass'
+      preLoaderRoute: typeof MassRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rosary': {
       id: '/rosary'
       path: '/rosary'
@@ -201,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/more'
       fullPath: '/more/'
       preLoaderRoute: typeof MoreIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/more/intentions': {
+      id: '/more/intentions'
+      path: '/more/intentions'
+      fullPath: '/more/intentions'
+      preLoaderRoute: typeof MoreIntentionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/more/saved': {
@@ -258,7 +298,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BibleRoute: BibleRoute,
+  MassRoute: MassRoute,
   RosaryRoute: RosaryRoute,
+  MoreIntentionsRoute: MoreIntentionsRoute,
   MoreSavedRoute: MoreSavedRoute,
   MoreSettingsRoute: MoreSettingsRoute,
   PrayersIdRoute: PrayersIdRoute,

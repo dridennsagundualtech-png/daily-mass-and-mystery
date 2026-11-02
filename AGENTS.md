@@ -16,3 +16,7 @@
 - `getToday(date)` in `src/lib/today.ts` is the single pure source for Today content (reused by a future widget).
 - Bead prayers are step lists (`src/lib/steps.ts`) rendered by `BeadPrayer` + `BeadRing`; bead index map is documented there.
 - Fonts are bundled via @fontsource imports in `src/styles.css`; never add remote font links.
+- Daily path/streak: steps call `markPath(item)` (`src/lib/streak.ts`); the streak day is recorded only when the user's goal is met.
+- Audio uses the device's speechSynthesis via `src/lib/speech.ts` (offline, no audio files or APIs).
+- Offline: vite-plugin-pwa generateSW; registration only through guarded `src/lib/pwa.ts` (never in preview/dev); vitest stubs `virtual:pwa-register`.
+- Mass reading verses use Bible verse keys (BOOK.ch.v) so highlights/notes are shared with the Bible reader.

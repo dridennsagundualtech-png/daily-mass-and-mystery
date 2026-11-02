@@ -57,8 +57,43 @@ function SettingsPage() {
         </Card>
 
         <Card>
+          <h2 className="mb-1 text-lg font-semibold">Daily goal</h2>
+          <p className="mb-3 text-muted-foreground">What counts as a day of prayer for your streak.</p>
+          <div className="grid gap-2">
+            <button className={`${opt(settings.goal === "any")} px-4`} onClick={() => update({ goal: "any" })} aria-pressed={settings.goal === "any"}>
+              Any one step (I prayed today)
+            </button>
+            <button className={`${opt(settings.goal === "full")} px-4`} onClick={() => update({ goal: "full" })} aria-pressed={settings.goal === "full"}>
+              Mass readings + Rosary
+            </button>
+          </div>
+        </Card>
+
+        <Card>
+          <h2 className="mb-1 text-lg font-semibold">Reading voice speed</h2>
+          <p className="mb-3 text-muted-foreground">Uses your phone's built-in voice.</p>
+          <div className="grid grid-cols-3 gap-2">
+            {[0.75, 0.9, 1.05].map((r, i) => (
+              <button key={r} className={opt(settings.voiceRate === r)} onClick={() => update({ voiceRate: r })} aria-pressed={settings.voiceRate === r}>
+                {["Slow", "Gentle", "Normal"][i]}
+              </button>
+            ))}
+          </div>
+        </Card>
+
+        <Card>
           <h2 className="mb-1 text-lg font-semibold">Daily reminder</h2>
-          <p className="mb-3 text-muted-foreground">Choose a time to be reminded to pray. Notifications will be connected later.</p>
+          <p className="mb-3 text-muted-foreground">A gentle reminder at this time while the app is open. Full background notifications come with the phone app version.</p>
+          <select
+            value={settings.reminderFor}
+            onChange={(e) => update({ reminderFor: e.target.value as "readings" | "rosary" | "prayer" })}
+            className="mb-3 min-h-12 w-full rounded-xl border border-input bg-background px-3"
+            aria-label="Remind me to"
+          >
+            <option value="readings">Read today's Mass readings</option>
+            <option value="rosary">Pray the Rosary</option>
+            <option value="prayer">Take a moment of prayer</option>
+          </select>
           <div className="flex gap-3">
             <input
               type="time"
@@ -73,6 +108,11 @@ function SettingsPage() {
               </button>
             )}
           </div>
+          {settings.reminder && typeof Notification !== "undefined" && Notification.permission === "default" && (
+            <button className="mt-3 min-h-12 w-full rounded-xl border font-semibold" onClick={() => void Notification.requestPermission()}>
+              Allow notifications
+            </button>
+          )}
         </Card>
       </div>
     </Page>

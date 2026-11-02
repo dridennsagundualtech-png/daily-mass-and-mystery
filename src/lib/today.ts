@@ -15,6 +15,7 @@ export interface TodayContent {
   colorName: string;
   mass: MassDay & { available: boolean };
   verse: DailyVerse;
+  verseFromMass: boolean;
   mysteries: MysterySet;
 }
 
@@ -39,7 +40,8 @@ export function getToday(date: Date = new Date()): TodayContent {
     color,
     colorName: COLOR_NAMES[color],
     mass,
-    verse: VERSES[dayOfYear(date) % VERSES.length] ?? VERSES[0]!,
+    verse: entry?.verse ?? VERSES[dayOfYear(date) % VERSES.length] ?? VERSES[0]!,
+    verseFromMass: !!entry?.verse,
     mysteries: MYSTERY_SETS[mysteriesForDate(date)],
   };
 }

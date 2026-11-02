@@ -20,7 +20,7 @@ export const Route = createFileRoute("/more/")({
 const row = "flex min-h-14 items-center justify-between gap-3 px-4 py-3 text-lg";
 
 function MorePage() {
-  const { streak, days } = useStreak();
+  const { streak, days, best } = useStreak();
   const [progress] = usePlanProgress();
 
   return (
@@ -34,7 +34,7 @@ function MorePage() {
           <p className="font-serif text-3xl font-semibold">
             {streak} day{streak === 1 ? "" : "s"}
           </p>
-          <p className="text-muted-foreground">{days.length} days of prayer in total</p>
+          <p className="text-muted-foreground">Best {best} · {days.length} days of prayer in total</p>
         </div>
       </Card>
 
@@ -61,6 +61,9 @@ function MorePage() {
       </div>
 
       <div className="card-surface divide-y overflow-hidden">
+        <Link to="/more/intentions" className={row}>
+          Prayer intentions <ChevronRight className="size-5 text-muted-foreground" />
+        </Link>
         <Link to="/more/saved" className={row}>
           Highlights, bookmarks & notes <ChevronRight className="size-5 text-muted-foreground" />
         </Link>
