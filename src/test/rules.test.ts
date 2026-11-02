@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mysteriesForDate } from "@/data/rosary";
-import { rosarySteps, chapletSteps } from "@/lib/steps";
+import { rosarySteps, chapletSteps, decadeHailMaryRun } from "@/lib/steps";
 import { BOOKS } from "@/data/books";
 import { seasonFor } from "@/lib/liturgy";
 import { getToday } from "@/lib/today";
@@ -27,6 +27,26 @@ describe("rosary order", () => {
   it("has 5 Fatima prayers", () => expect(steps.filter((s) => s.title === "Fatima Prayer").length).toBe(5));
   it("St Michael is optional", () =>
     expect(rosarySteps("joyful", { litany: false, stMichael: false }).some((s) => s.title === "Prayer to St Michael")).toBe(false));
+});
+
+describe("decade Hail Mary shortcut", () => {
+  const steps = rosarySteps("joyful", { litany: false, stMichael: false });
+  const firstDecade = steps.findIndex((s) => s.subtitle?.includes("of 10"));
+  it("offers the shortcut on decade Hail Marys", () => expect(decadeHailMaryRun(steps, firstDecade)).not.toBeNull());
+  it("one tap stands for 10 Hail Marys", () => expect(decadeHailMaryRun(steps, firstDecade)!.count).toBe(10));
+  it("lands on the decade's Glory Be", () =>
+    expect(steps[decadeHailMaryRun(steps, firstDecade)!.to]!.title).toBe("Glory Be"));
+  it("works from the middle of a decade", () =>
+    expect(steps[decadeHailMaryRun(steps, firstDecade + 5)!.to]!.title).toBe("Glory Be"));
+  it("not offered on the opening 3 Hail Marys", () => {
+    const pendant = steps.findIndex((s) => s.subtitle?.includes("of 3"));
+    expect(decadeHailMaryRun(steps, pendant)).toBeNull();
+  });
+  it("not offered on chaplet beads", () => {
+    const chap = chapletSteps();
+    const bead = chap.findIndex((s) => s.subtitle?.includes("of 10"));
+    expect(decadeHailMaryRun(chap, bead)).toBeNull();
+  });
 });
 
 describe("chaplet", () => {
