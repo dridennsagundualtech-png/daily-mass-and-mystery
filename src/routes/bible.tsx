@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Bookmark, ChevronLeft, ChevronRight, Copy, Minus, NotebookPen, Plus, Search, Share2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Btn, Page, btnClass } from "@/components/app-ui";
@@ -142,7 +142,6 @@ function ChapterGrid({ bookId, current }: { bookId: string; current?: number }) 
 function Reader({ bookId, ch, verse }: { bookId: string; ch: number; verse?: number }) {
   const book = bookById(bookId)!;
   const verses = getChapter(bookId, ch);
-  const navigate = useNavigate();
   const [, setLast] = useLastRead();
   const [hl, setHl] = useHighlights();
   const [marks, setMarks] = useBookmarks();
@@ -333,8 +332,6 @@ function Reader({ bookId, ch, verse }: { bookId: string; ch: number; verse?: num
           </div>
         </div>
       )}
-      {/* keep navigate referenced for future swipe support */}
-      <span hidden>{typeof navigate}</span>
     </main>
   );
 }

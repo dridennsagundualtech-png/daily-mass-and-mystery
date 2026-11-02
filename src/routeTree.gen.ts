@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BibleRouteImport } from './routes/bible'
 import { Route as RosaryRouteImport } from './routes/rosary'
 import { Route as PrayersIndexRouteImport } from './routes/prayers.index'
 import { Route as PrayersIdRouteImport } from './routes/prayers.$id'
@@ -19,6 +20,11 @@ import { Route as PrayersConfessionRouteImport } from './routes/prayers.confessi
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibleRoute = BibleRouteImport.update({
+  id: '/bible',
+  path: '/bible',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RosaryRoute = RosaryRouteImport.update({
@@ -49,6 +55,7 @@ const PrayersConfessionRoute = PrayersConfessionRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bible': typeof BibleRoute
   '/rosary': typeof RosaryRoute
   '/prayers/$id': typeof PrayersIdRoute
   '/prayers/chaplet': typeof PrayersChapletRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bible': typeof BibleRoute
   '/rosary': typeof RosaryRoute
   '/prayers/$id': typeof PrayersIdRoute
   '/prayers/chaplet': typeof PrayersChapletRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bible': typeof BibleRoute
   '/rosary': typeof RosaryRoute
   '/prayers/$id': typeof PrayersIdRoute
   '/prayers/chaplet': typeof PrayersChapletRoute
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/bible'
     | '/rosary'
     | '/prayers/$id'
     | '/prayers/chaplet'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/bible'
     | '/rosary'
     | '/prayers/$id'
     | '/prayers/chaplet'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/bible'
     | '/rosary'
     | '/prayers/$id'
     | '/prayers/chaplet'
@@ -101,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BibleRoute: typeof BibleRoute
   RosaryRoute: typeof RosaryRoute
   PrayersIdRoute: typeof PrayersIdRoute
   PrayersChapletRoute: typeof PrayersChapletRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bible': {
+      id: '/bible'
+      path: '/bible'
+      fullPath: '/bible'
+      preLoaderRoute: typeof BibleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rosary': {
@@ -157,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BibleRoute: BibleRoute,
   RosaryRoute: RosaryRoute,
   PrayersIdRoute: PrayersIdRoute,
   PrayersChapletRoute: PrayersChapletRoute,
