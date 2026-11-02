@@ -42,6 +42,8 @@ function PlanPage() {
   const [progress, setProgress] = usePlanProgress();
   const done = new Set(progress[id] ?? []);
   const nextDay = plan.days.findIndex((_, i) => !done.has(i));
+  const nextRs = nextDay >= 0 ? plan.days[nextDay]! : [];
+  const first = nextRs[0];
   const toggle = (i: number) =>
     setProgress((p) => {
       const cur = new Set(p[id] ?? []);
@@ -55,14 +57,14 @@ function PlanPage() {
       <Link to="/more" className="-mt-2 mb-4 inline-flex min-h-11 items-center gap-1 text-primary">
         <ChevronLeft className="size-5" /> More
       </Link>
-      {nextDay >= 0 && (
+      {nextDay >= 0 && first && (
         <div className="card-surface mb-4 p-5">
           <p className="eyebrow">Next · Day {nextDay + 1}</p>
-          <p className="mt-1 font-serif text-xl font-semibold">{label(plan.days[nextDay])}</p>
+          <p className="mt-1 font-serif text-xl font-semibold">{label(nextRs)}</p>
           <div className="mt-4 flex gap-3">
             <Link
               to="/bible"
-              search={{ book: plan.days[nextDay][0].book, ch: plan.days[nextDay][0].chapter }}
+              search={{ book: first.book, ch: first.chapter }}
               className="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl bg-primary px-5 font-semibold text-primary-foreground"
             >
               Read
