@@ -1,8 +1,8 @@
-import { ChevronLeft, Pause, RotateCcw, Share2, Volume2 } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { ChevronLeft, Pause, RotateCcw, Share2, Sparkles, Volume2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { BeadRing } from "./bead-ring";
 import { Btn, PrayerText } from "./app-ui";
-import { beadAt, type Step } from "@/lib/steps";
+import { beadAt, decadeHailMaryRun, type Step } from "@/lib/steps";
 import { markPath, type PathItem } from "@/lib/streak";
 import { useLocal } from "@/lib/storage";
 import { speak, stopSpeaking } from "@/lib/speech";
