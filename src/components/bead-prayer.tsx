@@ -63,7 +63,6 @@ export function BeadPrayer({
         type="button"
         onClick={next}
         className="card-surface mt-4 block w-full p-5 text-left"
-        aria-label="Tap to continue to the next prayer"
       >
         <h2 className="font-serif text-[1.65rem] font-semibold leading-tight text-primary">{step.title}</h2>
         {(step.scripture || step.fruit) && (
