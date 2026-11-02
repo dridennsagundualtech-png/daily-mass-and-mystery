@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ChevronLeft, Copy } from "lucide-react";
-import { Btn, Page, PrayerText } from "@/components/app-ui";
+import { Check, ChevronLeft, Copy } from "lucide-react";
+import { Btn, ListenButton, Page, PrayerText } from "@/components/app-ui";
+import { markPath, useStreak } from "@/lib/streak";
 import { prayerById } from "@/data/prayers";
 import { copyText } from "@/lib/share";
 
@@ -23,6 +24,8 @@ export const Route = createFileRoute("/prayers/$id")({
 
 function PrayerPage() {
   const p = Route.useLoaderData();
+  const { todayItems } = useStreak();
+  const prayed = todayItems.includes("prayer");
   return (
     <Page title={p.title}>
       <Link to="/prayers" className="-mt-2 mb-4 inline-flex min-h-11 items-center gap-1 text-primary">
@@ -31,9 +34,15 @@ function PrayerPage() {
       <article className="card-surface p-5">
         <PrayerText text={p.text} />
       </article>
-      <Btn variant="outline" className="mt-4" onClick={() => copyText(`${p.title}\n\n${p.text}`)}>
-        <Copy className="size-5" /> Copy
-      </Btn>
+      <div className="mt-4 flex flex-wrap gap-3">
+        <Btn onClick={() => markPath("prayer")} disabled={prayed}>
+          <Check className="size-5" /> {prayed ? "Prayed today" : "Amen"}
+        </Btn>
+        <ListenButton id={`prayer-${p.id}`} text={`${p.title}. ${p.text}`} />
+        <Btn variant="outline" onClick={() => copyText(`${p.title}\n\n${p.text}`)} aria-label="Copy">
+          <Copy className="size-5" />
+        </Btn>
+      </div>
     </Page>
   );
 }

@@ -6,6 +6,7 @@ import { MYSTERY_SETS, mysteriesForDate, type MysterySetId } from "@/data/rosary
 import { rosarySteps } from "@/lib/steps";
 import { useLocal } from "@/lib/storage";
 import { dateKey } from "@/lib/liturgy";
+import { IntentionsBox } from "@/components/intentions-box";
 
 export const Route = createFileRoute("/rosary")({
   head: () => ({
@@ -67,7 +68,16 @@ function RosaryPage() {
         </div>
       )}
 
-      <BeadPrayer steps={steps} index={index} onIndex={(i) => update({ index: i })} doneLabel="Rosary complete" />
+      {index === 0 && <IntentionsBox />}
+
+      <BeadPrayer
+        steps={steps}
+        index={index}
+        onIndex={(i) => update({ index: i })}
+        doneLabel="Rosary complete"
+        pathItem="rosary"
+        shareMessage={`I prayed the ${MYSTERY_SETS[setId].name} of the Holy Rosary today. Queen of the Holy Rosary, pray for us. — Sinner's Cure`}
+      />
     </Page>
   );
 }

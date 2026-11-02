@@ -26,7 +26,7 @@ function ChapletPage() {
       <Link to="/prayers" className="-mt-2 mb-4 inline-flex min-h-11 items-center gap-1 text-primary">
         <ChevronLeft className="size-5" /> All prayers
       </Link>
-      <BeadPrayer steps={steps} index={Math.min(index, steps.length)} onIndex={setIndex} doneLabel="Chaplet complete" />
+      <BeadPrayer steps={steps} index={Math.min(index, steps.length)} onIndex={setIndex} doneLabel="Chaplet complete" pathItem="prayer" shareMessage="I prayed the Divine Mercy Chaplet today. Jesus, I trust in You. — Sinner's Cure" />
     </Page>
   );
 }
