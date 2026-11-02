@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, CircleDot, HandHeart, Menu, Sun } from "lucide-react";
+import { BookOpen, CircleDot, HandHeart, Menu, Square, Sun, Volume2 } from "lucide-react";
+import { speak, stopSpeaking, useSpeaking } from "@/lib/speech";
 import { useEffect, useState, type ReactNode } from "react";
 
 const TABS = [
@@ -107,3 +108,19 @@ export function Btn({
 
 export const btnClass = (variant: BtnVariant = "primary", extra = "") =>
   `inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 font-semibold transition-opacity active:opacity-80 ${BTN[variant]} ${extra}`;
+
+export function ListenButton({ id, text, label = "Listen", className = "" }: { id: string; text: string; label?: string; className?: string }) {
+  const speaking = useSpeaking();
+  const on = speaking === id;
+  return (
+    <button
+      type="button"
+      onClick={() => (on ? stopSpeaking() : speak(id, text))}
+      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-input bg-card px-4 font-semibold ${on ? "text-primary" : ""} ${className}`}
+      aria-pressed={on}
+    >
+      {on ? <Square className="size-5" aria-hidden /> : <Volume2 className="size-5" aria-hidden />}
+      {on ? "Stop" : label}
+    </button>
+  );
+}

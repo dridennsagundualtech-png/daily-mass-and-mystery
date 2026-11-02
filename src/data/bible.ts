@@ -6,6 +6,7 @@
  */
 import text from "./bible-text.json";
 import { bookById } from "./books";
+import { massVerse } from "./mass";
 
 const BIBLE = text as Record<string, Record<string, string[]>>;
 
@@ -27,7 +28,7 @@ export function refLabel(key: string) {
 
 export function getVerse(key: string): string | null {
   const { book = "", ch, v } = parseKey(key);
-  return getChapter(book, ch)?.[v - 1] ?? null;
+  return getChapter(book, ch)?.[v - 1] ?? massVerse(key);
 }
 
 export interface SearchHit {

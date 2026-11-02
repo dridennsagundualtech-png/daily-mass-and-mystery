@@ -11,6 +11,10 @@ export interface MassDay {
   color?: LitColor;
   summary: string;
   readings: { label: string; citation: string }[];
+  /** Optional verse of the day drawn from this Mass. */
+  verse?: { text: string; ref: string };
+  /** Optional "Deeper look": context, key words, Church Fathers. Paragraphs separated by \n\n. */
+  deeper?: string;
 }
 
 export const READINGS: Record<string, MassDay> = {
@@ -37,6 +41,9 @@ export const READINGS: Record<string, MassDay> = {
       { label: "Second Reading", citation: "Romans 5:5-11" },
       { label: "Gospel", citation: "John 6:37-40" },
     ],
+    verse: { text: "But the souls of the just are in the hand of God, and the torment of death shall not touch them.", ref: "Wisdom 3:1" },
+    deeper:
+      "Context: The Book of Wisdom, written in Greek shortly before Christ, is one of the deuterocanonical books kept by the Catholic Church. It speaks openly of the immortality of the soul.\n\nKey word: \"Purgatory\" is not in Scripture, but the Church sees its root in prayer for the dead (2 Maccabees 12:46) and in the image of gold \"proved in the furnace\" (Wisdom 3:6).\n\nChurch Fathers: \"Let us help and commemorate them. If Job's sons were purified by their father's sacrifice, why would we doubt that our offerings for the dead bring them some consolation?\" — St John Chrysostom",
   },
   "2026-11-03": {
     celebration: "Tuesday of the 31st Week in Ordinary Time",
@@ -47,6 +54,9 @@ export const READINGS: Record<string, MassDay> = {
       { label: "Psalm", citation: "Psalm 22:26b-32" },
       { label: "Gospel", citation: "Luke 14:15-24" },
     ],
+    verse: { text: "Every tongue should confess that the Lord Jesus Christ is in the glory of God the Father.", ref: "Philippians 2:11" },
+    deeper:
+      "Context: Philippians 2:6-11 is likely an early Christian hymn, sung within twenty years of the Resurrection. It is prayed every Saturday evening in the Liturgy of the Hours.\n\nKey word: \"Emptied himself\" translates the Greek ekenōsen (kenosis). The Son did not stop being God; he took on our lowliness out of love.\n\nChurch Fathers: \"He who was rich became poor, that we through his poverty might be rich.\" — St Gregory of Nazianzus, echoing 2 Corinthians 8:9",
   },
   "2026-11-04": {
     celebration: "Memorial of Saint Charles Borromeo, Bishop",
