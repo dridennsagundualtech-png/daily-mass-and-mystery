@@ -1,8 +1,8 @@
-import { ChevronLeft, Pause, RotateCcw, Share2, Volume2 } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { ChevronLeft, Pause, RotateCcw, Share2, Sparkles, Volume2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { BeadRing } from "./bead-ring";
 import { Btn, PrayerText } from "./app-ui";
-import { beadAt, type Step } from "@/lib/steps";
+import { beadAt, decadeHailMaryRun, type Step } from "@/lib/steps";
 import { markPath, type PathItem } from "@/lib/streak";
 import { useLocal } from "@/lib/storage";
 import { speak, stopSpeaking } from "@/lib/speech";
@@ -28,6 +28,15 @@ export function BeadPrayer({
   const [audio, setAudio] = useLocal<boolean>("sc.audioGuide", false);
   const onIndexRef = useRef(onIndex);
   onIndexRef.current = onIndex;
+  const [tenConfirm, setTenConfirm] = useState(false);
+  const prevIndexRef = useRef(index);
+  useEffect(() => {
+    if (prevIndexRef.current !== index) {
+      prevIndexRef.current = index;
+      setTenConfirm(false);
+    }
+  }, [index]);
+  const ten = finished ? null : decadeHailMaryRun(steps, index);
 
   useEffect(() => {
     if (finished) markPath(pathItem);
@@ -122,13 +131,42 @@ export function BeadPrayer({
         <p className="mt-5 text-center text-sm text-muted-foreground">{audio ? "Listening… tap to skip ahead" : "Tap anywhere here to continue"}</p>
       </button>
 
-      <div className="sticky bottom-20 mt-4 flex gap-3 bg-background py-2">
-        <Btn variant="outline" onClick={back} disabled={index === 0} aria-label="Back">
-          <ChevronLeft className="size-5" /> Back
-        </Btn>
-        <Btn className="flex-1" onClick={next}>
-          {index === steps.length - 1 ? "Finish" : "Next"}
-        </Btn>
+      <div className="sticky bottom-20 mt-4 space-y-3 bg-background pb-1 pt-2">
+        {ten && tenConfirm && (
+          <div className="card-surface p-5" role="alertdialog" aria-label="Count ten Hail Marys">
+            <p className="font-serif text-xl font-semibold">One tap, ten Hail Marys</p>
+            <p className="mt-2 text-muted-foreground">
+              This tap stands for the <strong>10 Hail Marys</strong> of this decade. Keep the mystery in your heart and say them together in your spirit, then carry on.
+            </p>
+            <div className="mt-4 flex gap-3">
+              <Btn variant="outline" className="flex-1" onClick={() => setTenConfirm(false)}>
+                Never mind
+              </Btn>
+              <Btn className="flex-1" onClick={() => { setTenConfirm(false); onIndex(ten.to); }}>
+                Count all 10
+              </Btn>
+            </div>
+          </div>
+        )}
+        {ten && (
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => setTenConfirm(true)}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-input bg-card px-4 font-semibold text-primary"
+            >
+              <Sparkles className="size-5" /> Pray all 10 Hail Marys at once
+            </button>
+          </div>
+        )}
+        <div className="flex gap-3">
+          <Btn variant="outline" onClick={back} disabled={index === 0} aria-label="Back">
+            <ChevronLeft className="size-5" /> Back
+          </Btn>
+          <Btn className="flex-1" onClick={next}>
+            {index === steps.length - 1 ? "Finish" : "Next"}
+          </Btn>
+        </div>
       </div>
     </div>
   );

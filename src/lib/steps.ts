@@ -75,6 +75,20 @@ export function chapletSteps(): Step[] {
   return steps;
 }
 
+/**
+ * Decade Hail Mary shortcut. If step i is one of a decade's ten Hail Marys,
+ * returns { to: index of the step right after that run (its Glory Be),
+ * count: 10 } so one tap can stand for the whole decade. Null otherwise.
+ */
+export function decadeHailMaryRun(steps: Step[], i: number): { to: number; count: number } | null {
+  const isDecade = (s: Step | undefined) =>
+    !!s && s.title === "Hail Mary" && !!s.subtitle?.includes("of 10");
+  if (!isDecade(steps[i])) return null;
+  let j = i;
+  while (isDecade(steps[j + 1])) j++;
+  return { to: j + 1, count: 10 };
+}
+
 /** The bead that should be lit at step i (last non-null bead up to i). */
 export function beadAt(steps: Step[], i: number): number {
   for (let k = Math.min(i, steps.length - 1); k >= 0; k--) {
