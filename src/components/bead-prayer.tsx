@@ -40,7 +40,7 @@ export function BeadPrayer({
     );
   }
 
-  const step = steps[index];
+  const step = steps[index]!;
   const next = () => onIndex(index + 1);
   const pct = Math.round((index / steps.length) * 100);
 

@@ -17,7 +17,7 @@ export function useSettings() {
   const bumpText = (dir: 1 | -1) => {
     const i = TEXT_SCALES.indexOf(settings.textScale);
     const n = Math.max(0, Math.min(TEXT_SCALES.length - 1, (i < 0 ? 0 : i) + dir));
-    update({ textScale: TEXT_SCALES[n] });
+    update({ textScale: TEXT_SCALES[n] ?? 1 });
   };
   return { settings, update, bumpText };
 }

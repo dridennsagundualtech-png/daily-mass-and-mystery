@@ -73,5 +73,5 @@ export const MYSTERY_SETS: Record<MysterySetId, MysterySet> = {
 const BY_WEEKDAY: MysterySetId[] = ["glorious", "joyful", "sorrowful", "glorious", "luminous", "sorrowful", "joyful"];
 
 export function mysteriesForDate(date: Date): MysterySetId {
-  return BY_WEEKDAY[date.getDay()];
+  return BY_WEEKDAY[date.getDay()] ?? "glorious";
 }

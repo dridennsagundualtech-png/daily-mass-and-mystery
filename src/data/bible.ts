@@ -17,16 +17,16 @@ export const verseKey = (book: string, ch: number, v: number) => `${book}.${ch}.
 
 export function parseKey(key: string) {
   const [book, ch, v] = key.split(".");
-  return { book, ch: Number(ch), v: Number(v) };
+  return { book: book ?? "", ch: Number(ch), v: Number(v) };
 }
 
 export function refLabel(key: string) {
-  const { book, ch, v } = parseKey(key);
+  const { book = "", ch, v } = parseKey(key);
   return `${bookById(book)?.name ?? book} ${ch}:${v}`;
 }
 
 export function getVerse(key: string): string | null {
-  const { book, ch, v } = parseKey(key);
+  const { book = "", ch, v } = parseKey(key);
   return getChapter(book, ch)?.[v - 1] ?? null;
 }
 
