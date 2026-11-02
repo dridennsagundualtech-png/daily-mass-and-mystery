@@ -110,7 +110,7 @@ function RootComponent() {
   }, [settings.theme, settings.textScale]);
 
   useEffect(() => {
-    document.documentElement.dataset.lit = getToday(new Date()).color;
+    document.documentElement.dataset["lit"] = getToday(new Date()).color;
   }, []);
 
   return (

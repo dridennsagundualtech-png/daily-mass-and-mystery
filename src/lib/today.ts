@@ -39,7 +39,7 @@ export function getToday(date: Date = new Date()): TodayContent {
     color,
     colorName: COLOR_NAMES[color],
     mass,
-    verse: VERSES[dayOfYear(date) % VERSES.length],
+    verse: VERSES[dayOfYear(date) % VERSES.length] ?? VERSES[0]!,
     mysteries: MYSTERY_SETS[mysteriesForDate(date)],
   };
 }

@@ -78,7 +78,7 @@ export function chapletSteps(): Step[] {
 /** The bead that should be lit at step i (last non-null bead up to i). */
 export function beadAt(steps: Step[], i: number): number {
   for (let k = Math.min(i, steps.length - 1); k >= 0; k--) {
-    const b = steps[k].bead;
+    const b = steps[k]?.bead ?? null;
     if (b !== null) return b;
   }
   return -1;

@@ -15,11 +15,15 @@ interface BibleSearch {
 }
 
 export const Route = createFileRoute("/bible")({
-  validateSearch: (s: Record<string, unknown>): BibleSearch => ({
-    book: typeof s.book === "string" ? s.book : undefined,
-    ch: s.ch !== undefined ? Number(s.ch) || undefined : undefined,
-    v: s.v !== undefined ? Number(s.v) || undefined : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): BibleSearch => {
+    const out: BibleSearch = {};
+    if (typeof s["book"] === "string") out.book = s["book"];
+    const ch = Number(s["ch"]);
+    if (ch > 0) out.ch = ch;
+    const v = Number(s["v"]);
+    if (v > 0) out.v = v;
+    return out;
+  },
   head: () => ({
     meta: [
       { title: "Holy Bible — Sinner's Cure" },
@@ -34,7 +38,7 @@ export const Route = createFileRoute("/bible")({
 function BiblePage() {
   const { book, ch, v } = Route.useSearch();
   const b = book ? bookById(book) : undefined;
-  if (b && ch && ch >= 1 && ch <= b.chapters) return <Reader bookId={b.id} ch={ch} verse={v} />;
+  if (b && ch && ch >= 1 && ch <= b.chapters) return <Reader bookId={b.id} ch={ch} verse={v ?? 0} />;
   return <Library />;
 }
 
@@ -65,7 +69,7 @@ function Library() {
           {hits.map((h) => {
             const [bk, c, vv] = h.key.split(".");
             return (
-              <Link key={h.key} to="/bible" search={{ book: bk, ch: Number(c), v: Number(vv) }} className="card-surface block p-4">
+              <Link key={h.key} to="/bible" search={{ book: bk ?? "", ch: Number(c), v: Number(vv) }} className="card-surface block p-4">
                 <p className="font-semibold text-primary">{refLabel(h.key)}</p>
                 <p className="font-serif text-lg">{h.text}</p>
               </Link>
@@ -139,7 +143,7 @@ function ChapterGrid({ bookId, current }: { bookId: string; current?: number }) 
   );
 }
 
-function Reader({ bookId, ch, verse }: { bookId: string; ch: number; verse?: number }) {
+function Reader({ bookId, ch, verse }: { bookId: string; ch: number; verse: number }) {
   const book = bookById(bookId)!;
   const verses = getChapter(bookId, ch);
   const [, setLast] = useLastRead();
@@ -161,8 +165,10 @@ function Reader({ bookId, ch, verse }: { bookId: string; ch: number; verse?: num
   }, [bookId, ch, verse, setLast]);
 
   const idx = BOOKS.findIndex((b) => b.id === bookId);
-  const prev = ch > 1 ? { book: bookId, ch: ch - 1 } : idx > 0 ? { book: BOOKS[idx - 1].id, ch: BOOKS[idx - 1].chapters } : null;
-  const next = ch < book.chapters ? { book: bookId, ch: ch + 1 } : idx < BOOKS.length - 1 ? { book: BOOKS[idx + 1].id, ch: 1 } : null;
+  const pb = BOOKS[idx - 1];
+  const nb = BOOKS[idx + 1];
+  const prev = ch > 1 ? { book: bookId, ch: ch - 1 } : pb ? { book: pb.id, ch: pb.chapters } : null;
+  const next = ch < book.chapters ? { book: bookId, ch: ch + 1 } : nb ? { book: nb.id, ch: 1 } : null;
 
   const key = sel ? verseKey(bookId, ch, sel) : "";
   const selText = sel && verses ? `"${verses[sel - 1]}" — ${book.name} ${ch}:${sel}` : "";

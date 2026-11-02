@@ -27,9 +27,10 @@ function label(rs: PlanReading[]) {
   let i = 0;
   while (i < rs.length) {
     let j = i;
-    while (j + 1 < rs.length && rs[j + 1].book === rs[i].book && rs[j + 1].chapter === rs[j].chapter + 1) j++;
-    const name = bookById(rs[i].book)?.name ?? rs[i].book;
-    parts.push(j > i ? `${name} ${rs[i].chapter}–${rs[j].chapter}` : `${name} ${rs[i].chapter}`);
+    const a = rs[i]!;
+    while (j + 1 < rs.length && rs[j + 1]!.book === a.book && rs[j + 1]!.chapter === rs[j]!.chapter + 1) j++;
+    const name = bookById(a.book)?.name ?? a.book;
+    parts.push(j > i ? `${name} ${a.chapter}–${rs[j]!.chapter}` : `${name} ${a.chapter}`);
     i = j + 1;
   }
   return parts.join(", ");
