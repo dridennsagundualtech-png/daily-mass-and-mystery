@@ -29,11 +29,14 @@ export function BeadPrayer({
   const onIndexRef = useRef(onIndex);
   onIndexRef.current = onIndex;
   const [tenConfirm, setTenConfirm] = useState(false);
-  const ten = step0Run ? null : decadeHailMaryRun(steps, index);
-  if (index !== tenIndexRef.current) {
-    tenIndexRef.current = index;
-    setTenConfirm(false);
-  }
+  const prevIndexRef = useRef(index);
+  useEffect(() => {
+    if (prevIndexRef.current !== index) {
+      prevIndexRef.current = index;
+      setTenConfirm(false);
+    }
+  }, [index]);
+  const ten = finished ? null : decadeHailMaryRun(steps, index);
 
   useEffect(() => {
     if (finished) markPath(pathItem);
